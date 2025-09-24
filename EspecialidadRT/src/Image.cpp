@@ -327,7 +327,7 @@ Image::clipLine(Vector2i& inIniPos, Vector2i& inEndPos, const ColorImg& inColor)
       return false;
     }
     else {
-      int x, y;
+      int x = 0, y = 0;
       int codeOut = code0 ? code0 : code1;
       if(codeOut & RegionCode::kTOP) {
         x = inIniPos.x + (inEndPos.x - inIniPos.x) * (yMax - inIniPos.y) / (inEndPos.y - inIniPos.y);

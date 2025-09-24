@@ -115,14 +115,15 @@ class Triangle_T {
  public:
   Triangle_T() = default;
   Triangle_T(const Vector3_T<Real>& v0, 
-           const Vector3_T<Real>& v1, 
-           const Vector3_T<Real>& v2,
-           Vector3_T<Real> color,
-           Real kA, Real kD, Real kS) 
-    : v0(v0), v1(v1), v2(v2),
-      normal((v1 - v0).getNormalized().cross((v2 - v0).getNormalized())),
-      color(color), 
-      coeffs(kA, kD, kS) {}
+             const Vector3_T<Real>& v1, 
+             const Vector3_T<Real>& v2,
+             Vector3_T<Real> color,
+             Real kA, Real kD, Real kS) 
+      : v0(v0), v1(v1), v2(v2),
+        normal((v1 - v0).getNormalized().cross((v2 - v0).getNormalized())),
+        color(color), 
+        cm((v0 + v1 + v2) / (Real)3),
+        coeffs(kA, kD, kS) {}
   
   bool isInside(const Vector3_T<Real>& point) const {
     if(((v1 - v0) && (point - v0)).dot((v1 - v0) & (cm - v0)) < 0.0000001) {
@@ -139,7 +140,7 @@ class Triangle_T {
   Vector3_T<Real> cm;
   Vector3_T<Real> color;
   Vector3_T<Real> coeffs; // Ambient, Diffuse, Specular
-};
+};  
 
 template<typename Real>
 class Ray_T {
