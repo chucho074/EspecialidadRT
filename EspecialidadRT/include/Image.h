@@ -5,19 +5,7 @@
  * @date    04/01/25
  */
 #pragma once
-#include <fstream>
-#include <filesystem>
-
- //FileSystem
-namespace fsys = std::filesystem;
-
-//Path
-using Path = std::filesystem::path;
-using std::fstream;
-using std::ios;
-
-template<typename T>
-using Vector = std::vector<T>;
+#include "Prerequisites.h"
 
 struct ColorImg {
   unsigned char r;
