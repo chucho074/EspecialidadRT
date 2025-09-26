@@ -1,5 +1,6 @@
 #include "Image.h"
 #include "MathHelpers.h"
+#include "Model.h"
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -390,6 +391,20 @@ int main() {
   triangles.emplace_back(Vector3(100 + offsetX, -25 + offsetY, 300 + offsetZ), Vector3(200 + offsetX, -25 + offsetY, 300 + offsetZ), Vector3(200 + offsetX, -25 + offsetY, 400 + offsetZ), Vector3(0, 255, 0), kA, kD, kS);
   triangles.emplace_back(Vector3(100 + offsetX, -25 + offsetY, 300 + offsetZ), Vector3(200 + offsetX, -25 + offsetY, 400 + offsetZ), Vector3(100 + offsetX, -25 + offsetY, 400 + offsetZ), Vector3(0, 255, 0), kA, kD, kS);
 
+  Model model;
+  offsetX = -200;
+  offsetY = 40;
+  offsetZ = -150;
+  if(model.loadFromFile("Resources/Models/Cube.obj", 
+  //if(model.loadFromFile("Resources/Models/rex_norm.obj", 
+                        Vector3(100 + offsetX, -25 + offsetY, 300 + offsetZ),
+                        Vector3(10, 10, 10))) {
+    std::cout << "Model loaded successfully.\n";
+    triangles.insert(triangles.end(), model.m_trianglesData.begin(), model.m_trianglesData.end());
+  }
+  else {
+    std::cout << "Failed to load model.\n";
+  }
 
   Vector3 eye(0, 0, 0);
   Vector3 lightPos(400, 400, 400);
@@ -427,6 +442,7 @@ int main() {
         
         Ray currentRay(eye, pixel - eye);
         pixelColor = pixelColor + findColor(currentRay, spheres, planes, triangles, light, MAX_DEPTH);
+        //pixelColor = pixelColor + findColor(currentRay, spheres, planes, model.m_trianglesData, light, MAX_DEPTH);
       }
       ColorImg pixelColorImg;
       pixelColorImg.r = (unsigned char)std::min((REAL_TYPE)255, pixelColor.x / (REAL_TYPE)AASamples);

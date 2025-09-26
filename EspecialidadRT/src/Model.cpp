@@ -25,7 +25,7 @@ namespace std {
 }
 
 bool
-Model::loadFromFile(const Path& inPath) {
+Model::loadFromFile(const Path& inPath, Vector3 inSize, Vector3 inScale) {
 
 
   fstream objFile(inPath, ios::in | ios::ate);
@@ -41,8 +41,8 @@ Model::loadFromFile(const Path& inPath) {
   objFile.read(&fileData[0], fileSize);
 
   Vector<String> lines = split(fileData, '\n');
-  //Vector<SimpleVertex> vertices;
-  //Vector<uint32> indices;
+  Vector<SimpleVertex> vertices;
+  Vector<unsigned int> indices;
 
   Vector<Vector3> temp_pos;
   Vector<Vector2> temp_tc;
@@ -64,6 +64,10 @@ Model::loadFromFile(const Path& inPath) {
       pos.x = std::stof(tokens[1]);
       pos.y = std::stof(tokens[2]);
       pos.z = std::stof(tokens[3]);
+
+      pos = pos * inScale;
+      pos = pos + inSize;
+
 
       temp_pos.push_back(pos);
     }
@@ -126,6 +130,29 @@ Model::loadFromFile(const Path& inPath) {
   mesh.numIndices = m_indices.size();
 
   mesh.topology = 4;
+
+  //Set the triangle data
+  for(int i = m_meshes[0].baseIndex; i < m_meshes[0].baseIndex + m_meshes[0].numIndices; i += 3) {
+    Triangle tri;
+    //Obtener el indice del indice (xd?)
+    auto i0 = (m_meshes[0].baseIndex + i + 0);
+    auto i1 = (m_meshes[0].baseIndex + i + 1);
+    auto i2 = (m_meshes[0].baseIndex + i + 2);
+
+    auto& i0_index = m_indices[i0];
+    auto& i1_index = m_indices[i1];
+    auto& i2_index = m_indices[i2];
+
+    //Obtener los vertices especificos
+    auto& v0 = m_vertices[i0_index];
+    auto& v1 = m_vertices[i1_index];
+    auto& v2 = m_vertices[i2_index];
+    //Crear el triangulo
+    tri = Triangle(v0.position, v1.position, v2.position, Vector3(0, 0, 255), 0.3, 0.4, 0.3);
+    m_trianglesData.push_back(tri);
+    //m_trianglesData.emplace_back(&v0, &v1, &v2, Vector3(0, 0, 255), 0.3, 0.4, 0.3);
+
+  }
 
   return true;
 }

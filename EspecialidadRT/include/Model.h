@@ -28,11 +28,12 @@ public:
   ~Model() = default;
 
   bool
-  loadFromFile(const Path& inPath);
+  loadFromFile(const Path& inPath, Vector3 inPos, Vector3 inScale);
 
   Vector<MeshData> m_meshes;
 
 
+  Vector<Triangle> m_trianglesData;
   Vector<SimpleVertex> m_vertices;
   Vector<unsigned int> m_indices;
 };
