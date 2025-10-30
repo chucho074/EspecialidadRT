@@ -36,7 +36,7 @@ Vector<Vector3> findClosestIntersection(const Ray& ray,
   for(size_t i = 0; i < count; ++i) {
     REAL_TYPE a = ray.direction.dot(ray.direction);
     REAL_TYPE b = 2 * ray.direction.dot(ray.origin - spheres[i].center);
-    REAL_TYPE c = (ray.origin - spheres[i].center).dot(ray.origin - spheres[i].center) - spheres[i].radius * spheres[i].radius;
+    REAL_TYPE c = (ray.origin - spheres[i].center).dot(ray.origin - spheres[i].center) - (spheres[i].radius * spheres[i].radius);
     REAL_TYPE discriminant = b * b - 4 * a * c;
 
     if(discriminant < 0) {
@@ -109,39 +109,39 @@ Vector<Vector3> findClosestIntersection(const Ray& ray,
     REAL_TYPE b = triangles[i].normal.dot(ray.direction);
     REAL_TYPE t = a/b;
     if(t > 0.001 && t < 50000) {
-      Vector3 intersectionPoint = ray.where(t);
+      /*Vector3 intersectionPoint = ray.where(t);
       if(triangles[i].isInside(intersectionPoint)) {
         solutions.push_back(t);
         index.push_back(i);
-      }
+      }*/
 
       //Shader de ShadeRED
-      //Vector3 e1 = triangles[i].v1 - triangles[i].v0;
-      //Vector3 e2 = triangles[i].v2 - triangles[i].v0;
-      //Vector3 p = ray.direction.cross(e2);
-      //REAL_TYPE det = e1.dot(p);
-      ////if(det > -0.000001 && det < 0.000001) {
-      //if(std::fabs(det) < 0.000001 ) {
-      //  continue;
-      //}
-      //REAL_TYPE invDet = 1.f / det;
-      //Vector3 tv = ray.origin - triangles[i].v0;
-      //REAL_TYPE u = tv.dot(p) * invDet;
-      //if(u < 0.f || u > 1.f) {
-      //  continue;
-      //  //return false;
-      //}
-      //Vector3 q = tv.cross(e1);
-      //REAL_TYPE v = ray.direction.dot(q) * invDet;
-      //if(v < 0.f || u + v > 1.f) {
-      //  continue;
-      //  //return false;
-      //}
-      //REAL_TYPE t_mt = e2.dot(q) * invDet;
-      //if(t_mt > 0.001f && t_mt < 50000) {
-      //  solutions.push_back(t);
-      //  index.push_back(i);
-      //}
+      Vector3 e1 = triangles[i].v1 - triangles[i].v0;
+      Vector3 e2 = triangles[i].v2 - triangles[i].v0;
+      Vector3 p = ray.direction.cross(e2);
+      REAL_TYPE det = e1.dot(p);
+      //if(det > -0.000001 && det < 0.000001) {
+      if(std::fabs(det) < 0.000001 ) {
+        continue;
+      }
+      REAL_TYPE invDet = 1.f / det;
+      Vector3 tv = ray.origin - triangles[i].v0;
+      REAL_TYPE u = tv.dot(p) * invDet;
+      if(u < 0.f || u > 1.f) {
+        continue;
+        //return false;
+      }
+      Vector3 q = tv.cross(e1);
+      REAL_TYPE v = ray.direction.dot(q) * invDet;
+      if(v < 0.f || u + v > 1.f) {
+        continue;
+        //return false;
+      }
+      REAL_TYPE t_mt = e2.dot(q) * invDet;
+      if(t_mt > 0.001f && t_mt < 50000) {
+        solutions.push_back(t);
+        index.push_back(i);
+      }
     }
   }
 
